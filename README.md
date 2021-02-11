@@ -1,5 +1,8 @@
 Viper-Firmware
 ==============
+
+[![Compile Sketch status](https://github.com/107-systems/Viper-Firmware/workflows/Compile%20Sketch/badge.svg)](https://github.com/107-systems/Viper-Firmware/actions?workflow=Compile+Sketch)
+
 This repository contains the Arduino based firmware for controlling the Viper MAV.
 
 <p align="center">
