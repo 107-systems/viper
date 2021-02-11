@@ -2,53 +2,69 @@
  * This software is distributed under the terms of the MIT License.
  * Copyright (c) 2020 LXRobotics.
  * Author: Alexander Entinger <alexander.entinger@lxrobotics.com>
- * Contributors: https://github.com/107-systems/Viper-Firmware/graphs/contributors
+ * Contributors: https://github.com/107-systems/UAVCAN-GNSS-node/graphs/contributors
+ */
+
+/* Recommended hardware setup:
+ *  MKR Zero <-> MKR CAN Shield <-> MKR GPS Shield
  */
 
 /**************************************************************************************
  * INCLUDE
  **************************************************************************************/
 
-#include <Arduino.h>
 #include <SPI.h>
 
+#include <ArduinoUAVCAN.h>
 #include <ArduinoMCP2515.h>
-#include <ArduinoBMP388.h>
-#include <ArduinoViperFpga.h>
+#define DBG_ENABLE_ERROR
+#define DBG_ENABLE_WARNING
+#define DBG_ENABLE_INFO
+#define DBG_ENABLE_DEBUG
+//#define DBG_ENABLE_VERBOSE
+#include <ArduinoDebug.hpp>
 
-#include "ViperConst.h"
-#include "ViperFpgaUtil.h"
-#include "ViperBMP388Util.h"
-#include "ViperMCP2515Util.h"
+#undef max
+#undef min
+#include <algorithm>
+
+/**************************************************************************************
+ * CONSTANTS
+ **************************************************************************************/
+
+static uint8_t const UAVCAN_NODE_ID         = 13;
+static int     const MKRCAN_MCP2515_CS_PIN  = 3;
+static int     const MKRCAN_MCP2515_INT_PIN = 7;
 
 /**************************************************************************************
  * FUNCTION DECLARATION
  **************************************************************************************/
+ 
+uint8_t spi_transfer(uint8_t const);
 
-uint8_t spi_transfer                 (uint8_t const);
-void    mcp2515_onReceiveBufferFull  (uint32_t const, uint32_t const, uint8_t const *, uint8_t const);
-void    mcp2515_onTransmitBufferEmpty(ArduinoMCP2515 *);
-void    bmp388_onSensorData          (float const pressure_hpa, float const temperature_deg);
+namespace MCP2515
+{
+void select();
+void deselect();
+void onExternalEvent();
+void onReceive(CanardFrame const &);
+bool transmit(CanardFrame const &);
+}
 
 /**************************************************************************************
  * GLOBAL VARIABLES
  **************************************************************************************/
 
-ArduinoViperFpga fpga(viper::fpga_spi_select,
-                      viper::fpga_spi_deselect,
-                      spi_transfer);
-
-ArduinoMCP2515 mcp2515(viper::mcp2515_spi_select,
-                       viper::mcp2515_spi_deselect,
+ArduinoMCP2515 mcp2515(MCP2515::select,
+                       MCP2515::deselect,
                        spi_transfer,
                        micros,
-                       mcp2515_onReceiveBufferFull,
-                       mcp2515_onTransmitBufferEmpty);
+                       MCP2515::onReceive,
+                       nullptr);
 
-ArduinoBMP388 bmp388(viper::bmp388_spi_select,
-                     viper::bmp388_spi_deselect,
-                     spi_transfer,
-                     bmp388_onSensorData);
+ArduinoUAVCAN uc(UAVCAN_NODE_ID, MCP2515::transmit);
+
+DEBUG_INSTANCE(120, Serial);
 
 /**************************************************************************************
  * SETUP/LOOP
@@ -56,50 +72,37 @@ ArduinoBMP388 bmp388(viper::bmp388_spi_select,
 
 void setup()
 {
-  /* Setup Serial */
+  /* USB serial for debug messages.
+   */
   Serial.begin(115200);
   while(!Serial) { }
 
+  /* Serial connected to MKR GPS board.
+   */
+  Serial1.begin(9600);
 
-  /* Setup SPI */
+  /* Setup SPI access
+   */
   SPI.begin();
+  pinMode(MKRCAN_MCP2515_CS_PIN, OUTPUT);
+  digitalWrite(MKRCAN_MCP2515_CS_PIN, HIGH);
 
+  /* Attach interrupt handler to register 
+   * MCP2515 signaled by taking INT low.
+   */
+  pinMode(MKRCAN_MCP2515_INT_PIN, INPUT_PULLUP);
+  attachInterrupt(digitalPinToInterrupt(MKRCAN_MCP2515_INT_PIN), MCP2515::onExternalEvent, FALLING);
 
-  /* Setup FPGA */
-  pinMode(viper::FPGA_CS_PIN, OUTPUT);
-  digitalWrite(viper::FPGA_CS_PIN, HIGH);
-
-  if (fpga.begin() != ArduinoViperFpga::Status::OK) {
-    Serial.println("ArduinoViperFpga::begin() failed");
-  } else {
-    Serial.print("FPGA Revision: ");
-    Serial.println(fpga.getRevNum(), HEX);
-  }
-
-
-  /* Setup MCP2515 */
-  pinMode(viper::MCP2515_CS_PIN, OUTPUT);
-  digitalWrite(viper::MCP2515_CS_PIN, HIGH);
-  pinMode(viper::MCP2515_INT_PIN, INPUT_PULLUP);
-  attachInterrupt(digitalPinToInterrupt(viper::MCP2515_INT_PIN), viper::mcp2515_onExternalEvent, FALLING);
-
+  /* Configure MCP2515 */
   mcp2515.begin();
   mcp2515.setBitRate(CanBitRate::BR_250kBPS);
-  mcp2515.setNormalMode();
-
-
-  /* Setup BMP388 */
-  pinMode(viper::BMP388_CS_PIN, OUTPUT);
-  digitalWrite(viper::BMP388_CS_PIN, HIGH);
-  pinMode(viper::BMP388_INT_PIN, INPUT_PULLUP);
-  attachInterrupt(digitalPinToInterrupt(viper::BMP388_INT_PIN), viper::bmp388_onExternalEvent, FALLING);
-
-  bmp388.begin(BMP388::OutputDataRate::ODR_12_5_Hz);
+  mcp2515.setListenOnlyMode();
 }
 
 void loop()
 {
-
+  /* Transmit all enqeued CAN frames */
+  while(uc.transmitCanFrame()) { }
 }
 
 /**************************************************************************************
@@ -111,17 +114,31 @@ uint8_t spi_transfer(uint8_t const data)
   return SPI.transfer(data);
 }
 
-void mcp2515_onReceiveBufferFull(uint32_t const timestamp_usec, uint32_t const id, uint8_t const * data, uint8_t const len)
+/**************************************************************************************
+ * FUNCTION DEFINITION MCP2515
+ **************************************************************************************/
+
+namespace MCP2515
 {
-  /* TODO */
+
+void select() {
+  digitalWrite(MKRCAN_MCP2515_CS_PIN, LOW);
 }
 
-void mcp2515_onTransmitBufferEmpty(ArduinoMCP2515 * this_ptr)
-{
-  /* TODO */
+void deselect() {
+  digitalWrite(MKRCAN_MCP2515_CS_PIN, HIGH);
 }
 
-void bmp388_onSensorData(float const pressure_hpa, float const temperature_deg)
-{
-  /* TODO */
+void onExternalEvent() {
+  mcp2515.onExternalEventHandler();
 }
+
+void onReceive(CanardFrame const & frame) {
+  uc.onCanFrameReceived(frame);
+}
+
+bool transmit(CanardFrame const & frame) {
+  return mcp2515.transmit(frame);
+}
+
+} /* MCP2515 */
