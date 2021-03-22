@@ -62,7 +62,7 @@ ArduinoMCP2515 mcp2515(MCP2515::select,
                        MCP2515::onReceive,
                        nullptr);
 
-ArduinoUAVCAN uc(UAVCAN_NODE_ID, MCP2515::transmit);
+ArduinoUAVCAN uavcan_hdl(UAVCAN_NODE_ID, MCP2515::transmit);
 
 DEBUG_INSTANCE(120, Serial);
 
@@ -95,14 +95,14 @@ void setup()
 
   /* Configure MCP2515 */
   mcp2515.begin();
-  mcp2515.setBitRate(CanBitRate::BR_250kBPS);
+  mcp2515.setBitRate(CanBitRate::BR_250kBPS_16MHZ);
   mcp2515.setListenOnlyMode();
 }
 
 void loop()
 {
   /* Transmit all enqeued CAN frames */
-  while(uc.transmitCanFrame()) { }
+  while(uavcan_hdl.transmitCanFrame()) { }
 }
 
 /**************************************************************************************
@@ -134,7 +134,7 @@ void onExternalEvent() {
 }
 
 void onReceive(CanardFrame const & frame) {
-  uc.onCanFrameReceived(frame);
+  uavcan_hdl.onCanFrameReceived(frame);
 }
 
 bool transmit(CanardFrame const & frame) {
