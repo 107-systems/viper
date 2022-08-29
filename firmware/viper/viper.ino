@@ -2,11 +2,7 @@
  * This software is distributed under the terms of the MIT License.
  * Copyright (c) 2020 LXRobotics.
  * Author: Alexander Entinger <alexander.entinger@lxrobotics.com>
- * Contributors: https://github.com/107-systems/UAVCAN-GNSS-node/graphs/contributors
- */
-
-/* Recommended hardware setup:
- *  MKR Zero <-> MKR CAN Shield <-> MKR GPS Shield
+ * Contributors: https://github.com/107-systems/viper/graphs/contributors
  */
 
 /**************************************************************************************
@@ -15,14 +11,14 @@
 
 #include <SPI.h>
 
-#include <ArduinoUAVCAN.h>
-#include <ArduinoMCP2515.h>
+#include <107-Arduino-Cyphal.h>
+#include <107-Arduino-MCP2515.h>
 #define DBG_ENABLE_ERROR
 #define DBG_ENABLE_WARNING
 #define DBG_ENABLE_INFO
 #define DBG_ENABLE_DEBUG
 //#define DBG_ENABLE_VERBOSE
-#include <ArduinoDebug.hpp>
+#include <107-Arduino-Debug.hpp>
 
 #undef max
 #undef min
@@ -32,37 +28,39 @@
  * CONSTANTS
  **************************************************************************************/
 
-static uint8_t const UAVCAN_NODE_ID         = 13;
-static int     const MKRCAN_MCP2515_CS_PIN  = 3;
-static int     const MKRCAN_MCP2515_INT_PIN = 7;
+static uint8_t     const VIPER_NODE_ID          = 13;
+static int         const MKRCAN_MCP2515_CS_PIN  = 3;
+static int         const MKRCAN_MCP2515_INT_PIN = 7;
+static SPISettings const MCP2515x_SPI_SETTING   {1000000, MSBFIRST, SPI_MODE0};
 
 /**************************************************************************************
  * FUNCTION DECLARATION
  **************************************************************************************/
- 
-uint8_t spi_transfer(uint8_t const);
 
-namespace MCP2515
-{
-void select();
-void deselect();
-void onExternalEvent();
-void onReceive(CanardFrame const &);
-bool transmit(CanardFrame const &);
-}
+void onReceiveBufferFull(CanardFrame const &);
 
 /**************************************************************************************
  * GLOBAL VARIABLES
  **************************************************************************************/
 
-ArduinoMCP2515 mcp2515(MCP2515::select,
-                       MCP2515::deselect,
-                       spi_transfer,
+ArduinoMCP2515 mcp2515([]()
+                       {
+                         noInterrupts();
+                         SPI.beginTransaction(MCP2515x_SPI_SETTING);
+                         digitalWrite(MKRCAN_MCP2515_CS_PIN, LOW);
+                       },
+                       []()
+                       {
+                         digitalWrite(MKRCAN_MCP2515_CS_PIN, HIGH);
+                         SPI.endTransaction();
+                         interrupts();
+                       },
+                       [](uint8_t const d) { return SPI.transfer(d); },
                        micros,
-                       MCP2515::onReceive,
+                       onReceiveBufferFull,
                        nullptr);
 
-ArduinoUAVCAN uavcan_hdl(UAVCAN_NODE_ID, MCP2515::transmit);
+Node node_hdl([](CanardFrame const & frame) -> bool { return mcp2515.transmit(frame); });
 
 DEBUG_INSTANCE(120, Serial);
 
@@ -81,6 +79,9 @@ void setup()
    */
   Serial1.begin(9600);
 
+  /* Configure OpenCyphal node. */
+  node_hdl.setNodeId(VIPER_NODE_ID);
+
   /* Setup SPI access
    */
   SPI.begin();
@@ -91,7 +92,7 @@ void setup()
    * MCP2515 signaled by taking INT low.
    */
   pinMode(MKRCAN_MCP2515_INT_PIN, INPUT_PULLUP);
-  attachInterrupt(digitalPinToInterrupt(MKRCAN_MCP2515_INT_PIN), MCP2515::onExternalEvent, FALLING);
+  attachInterrupt(digitalPinToInterrupt(MKRCAN_MCP2515_INT_PIN), []() { mcp2515.onExternalEventHandler(); }, FALLING);
 
   /* Configure MCP2515 */
   mcp2515.begin();
@@ -102,43 +103,14 @@ void setup()
 void loop()
 {
   /* Transmit all enqeued CAN frames */
-  while(uavcan_hdl.transmitCanFrame()) { }
+  while(node_hdl.transmitCanFrame()) { }
 }
 
 /**************************************************************************************
  * FUNCTION DEFINITION
  **************************************************************************************/
 
-uint8_t spi_transfer(uint8_t const data)
+void onReceiveBufferFull(CanardFrame const & frame)
 {
-  return SPI.transfer(data);
+  node_hdl.onCanFrameReceived(frame, micros());
 }
-
-/**************************************************************************************
- * FUNCTION DEFINITION MCP2515
- **************************************************************************************/
-
-namespace MCP2515
-{
-
-void select() {
-  digitalWrite(MKRCAN_MCP2515_CS_PIN, LOW);
-}
-
-void deselect() {
-  digitalWrite(MKRCAN_MCP2515_CS_PIN, HIGH);
-}
-
-void onExternalEvent() {
-  mcp2515.onExternalEventHandler();
-}
-
-void onReceive(CanardFrame const & frame) {
-  uavcan_hdl.onCanFrameReceived(frame);
-}
-
-bool transmit(CanardFrame const & frame) {
-  return mcp2515.transmit(frame);
-}
-
-} /* MCP2515 */
