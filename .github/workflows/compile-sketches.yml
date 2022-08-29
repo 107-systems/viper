@@ -57,7 +57,7 @@ jobs:
           libraries: |
             - name: 107-Arduino-Debug
             - name: 107-Arduino-MCP2515
-            - name: 107-Arduino-UAVCAN
+            - name: 107-Arduino-Cyphal
           sketch-paths: |
             - ${{ github.workspace }}
           enable-deltas-report: true
