@@ -1,0 +1,7 @@
+build
+log
+install
+**/__pycache__
+.vscode
+.idea/
+cmake-build-debug/

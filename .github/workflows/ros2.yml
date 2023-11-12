@@ -1,0 +1,84 @@
+name: ros2
+
+on:
+  push:
+    paths:
+      - ".github/workflows/ros2.yml"
+      - "include/**"
+      - "launch/**"
+      - "src/**"
+      - "CMakeLists.txt"
+      - "package.xml"
+  pull_request:
+    paths:
+      - ".github/workflows/ros2.yml"
+      - "include/**"
+      - "launch/**"
+      - "src/**"
+      - "CMakeLists.txt"
+      - "package.xml"
+
+env:
+  BUILD_TYPE: Release
+
+jobs:
+  build:
+    name: Build on ros2 ${{ matrix.ros_distro }}
+    runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        ros_distro: [ humble ]
+
+    steps:   
+    - name: Install gsl-lite
+      run: |
+        git clone https://github.com/gsl-lite/gsl-lite && cd gsl-lite
+        mkdir build && cd build
+        cmake .. && make -j8
+        sudo make install
+
+    - name: Install Catch2
+      run: |
+        git clone https://github.com/catchorg/Catch2 && cd Catch2
+        mkdir build && cd build
+        cmake .. && make -j8
+        sudo make install
+
+    - name: Install fmt
+      run: |
+        git clone https://github.com/fmtlib/fmt && cd fmt
+        mkdir build && cd build
+        cmake -DFMT_TEST=OFF ..
+        make -j8
+        sudo make install
+
+    - name: Install mp-units
+      run: |
+        git clone https://github.com/mpusz/mp-units && cd mp-units
+        mkdir build && cd build
+        cmake -DMP_UNITS_AS_SYSTEM_HEADERS=ON -DMP_UNITS_BUILD_LA=OFF ..
+        make -j8
+        sudo make install
+
+    - uses: ros-tooling/setup-ros@v0.7
+      with:
+        required-ros-distributions: ${{ matrix.ros_distro }}
+    
+    - name: Setup ros2 workspace
+      run: | 
+        source /opt/ros/${{ matrix.ros_distro }}/setup.bash
+        mkdir -p ${{github.workspace}}/ros2_ws/src
+        cd ${{github.workspace}}/ros2_ws
+        colcon build
+        
+    - uses: actions/checkout@v4
+      with:
+        path: 'ros2_ws/src/viper'
+        submodules: true
+        fetch-depth: 1
+
+    - name: colcon build
+      run: |
+        source /opt/ros/${{ matrix.ros_distro }}/setup.bash
+        cd ${{github.workspace}}/ros2_ws
+        colcon build --event-handlers console_direct+
