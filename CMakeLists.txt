@@ -12,6 +12,7 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
+find_package(geometry_msgs REQUIRED)
 find_package(mp-units REQUIRED)
 ##########################################################################
 add_subdirectory(external/107-Arduino-Cyphal)
@@ -32,7 +33,7 @@ target_link_libraries(${VIPER_TARGET}
 )
 #######################################################################################
 target_compile_features(${VIPER_TARGET} PRIVATE cxx_std_20)
-ament_target_dependencies(${VIPER_TARGET} rclcpp std_msgs mp-units)
+ament_target_dependencies(${VIPER_TARGET} rclcpp std_msgs geometry_msgs mp-units)
 #######################################################################################
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)

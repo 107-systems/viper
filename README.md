@@ -63,8 +63,9 @@ ros2 launch viper viper.py
 |:------------:|:------------------------------------------------------------------------------:|
 
 ##### Subscribed Topics
-|     Default name      |        Type         | Description                  |
-|:---------------------:|:-------------------:|------------------------------|
+| Default name |                                          Type                                          | Description                                    |
+|:------------:|:--------------------------------------------------------------------------------------:|------------------------------------------------|
+| `/cmd_vel`   | [`geometry_msgs/Twist`](http://docs.ros.org/en/api/geometry_msgs/html/msg/Twist.html)  | Linear/angular drone target velocity setpoints |
 
 ##### Parameters
 |                      Name                      |       Default        | Description                                                             |

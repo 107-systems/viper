@@ -16,9 +16,12 @@
 
 #include <std_msgs/msg/float32.hpp>
 
+#include <geometry_msgs/msg/twist.hpp>
+
 #include <cyphal++/cyphal++.h>
 
 #include <mp-units/systems/si/si.h>
+#include <mp-units/systems/angular/angular.h>
 
 #include "CanManager.h"
 
@@ -29,6 +32,7 @@
 using namespace mp_units;
 using mp_units::si::unit_symbols::m;
 using mp_units::si::unit_symbols::s;
+using mp_units::angular::unit_symbols::rad;
 
 namespace viper
 {
@@ -62,6 +66,13 @@ private:
   void init_cyphal_node_info();
 
   CanardMicrosecond micros();
+
+  rclcpp::QoS _teleop_qos_profile;
+  rclcpp::SubscriptionOptions _teleop_sub_options;
+  rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr _teleop_sub;
+  quantity<m/s> _target_linear_velocity_x, _target_linear_velocity_y, _target_linear_velocity_z;
+  quantity<rad/s> _target_angular_velocity_x, _target_angular_velocity_y, _target_angular_velocity_z;
+  void init_teleop_sub();
 
   static std::chrono::milliseconds constexpr CTRL_LOOP_RATE{10};
   rclcpp::TimerBase::SharedPtr _ctrl_loop_timer;

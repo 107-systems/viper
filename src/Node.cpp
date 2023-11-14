@@ -34,6 +34,19 @@ Node::Node()
             cyphal::Node::DEFAULT_MTU_SIZE}
 , _node_mtx{}
 , _node_start{std::chrono::steady_clock::now()}
+, _teleop_qos_profile
+{
+  rclcpp::KeepLast(10),
+  rmw_qos_profile_sensor_data
+}
+, _teleop_sub_options{}
+, _teleop_sub{}
+, _target_linear_velocity_x{0. * m/s}
+, _target_linear_velocity_y{0. * m/s}
+, _target_linear_velocity_z{0. * m/s}
+, _target_angular_velocity_x{0. * rad/s}
+, _target_angular_velocity_y{0. * rad/s}
+, _target_angular_velocity_z{0. * rad/s}
 {
   init_cyphal_heartbeat();
   init_cyphal_node_info();
@@ -56,6 +69,8 @@ Node::Node()
       std::lock_guard<std::mutex> lock(_node_mtx);
       _node_hdl.onCanFrameReceived(frame);
     });
+
+  init_teleop_sub();
 
   _ctrl_loop_timer = create_wall_timer(CTRL_LOOP_RATE, [this]() { this->ctrl_loop(); });
 
@@ -103,6 +118,73 @@ CanardMicrosecond Node::micros()
   auto const now = std::chrono::steady_clock::now();
   auto const node_uptime = (now - _node_start);
   return std::chrono::duration_cast<std::chrono::microseconds>(node_uptime).count();
+}
+
+void Node::init_teleop_sub()
+{
+  declare_parameter("teleop_topic", "cmd_vel_head");
+  declare_parameter("teleop_topic_deadline_ms", 100);
+  declare_parameter("teleop_topic_liveliness_lease_duration", 1000);
+
+  auto const teleop_topic = get_parameter("teleop_topic").as_string();
+  auto const teleop_topic_deadline = std::chrono::milliseconds(get_parameter("teleop_topic_deadline_ms").as_int());
+  auto const teleop_topic_liveliness_lease_duration = std::chrono::milliseconds(get_parameter("teleop_topic_liveliness_lease_duration").as_int());
+
+  _teleop_qos_profile.deadline(teleop_topic_deadline);
+  _teleop_qos_profile.liveliness(RMW_QOS_POLICY_LIVELINESS_MANUAL_BY_TOPIC);
+  _teleop_qos_profile.liveliness_lease_duration(teleop_topic_liveliness_lease_duration);
+
+  _teleop_sub_options.event_callbacks.deadline_callback =
+    [this, teleop_topic](rclcpp::QOSDeadlineRequestedInfo & event) -> void
+    {
+      RCLCPP_ERROR_THROTTLE(get_logger(), *get_clock(), 5*1000UL,
+                            "deadline missed for \"%s\" (total_count: %d, total_count_change: %d).",
+                            teleop_topic.c_str(), event.total_count, event.total_count_change);
+
+      _target_linear_velocity_x = 0. * m/s;
+      _target_linear_velocity_y = 0. * m/s;
+      _target_linear_velocity_z = 0. * m/s;
+
+      _target_angular_velocity_x = 0. * rad/s;
+      _target_angular_velocity_y = 0. * rad/s;
+      _target_angular_velocity_z = 0. * rad/s;
+    };
+
+  _teleop_sub_options.event_callbacks.liveliness_callback =
+    [this, teleop_topic](rclcpp::QOSLivelinessChangedInfo & event) -> void
+    {
+      if (event.alive_count > 0)
+      {
+        RCLCPP_INFO(get_logger(), "liveliness gained for \"%s\"", teleop_topic.c_str());
+      }
+      else
+      {
+        RCLCPP_WARN(get_logger(), "liveliness lost for \"%s\"", teleop_topic.c_str());
+
+        _target_linear_velocity_x = 0. * m/s;
+        _target_linear_velocity_y = 0. * m/s;
+        _target_linear_velocity_z = 0. * m/s;
+
+        _target_angular_velocity_x = 0. * rad/s;
+        _target_angular_velocity_y = 0. * rad/s;
+        _target_angular_velocity_z = 0. * rad/s;
+      }
+    };
+
+  _teleop_sub = create_subscription<geometry_msgs::msg::Twist>(
+    teleop_topic,
+    _teleop_qos_profile,
+    [this](geometry_msgs::msg::Twist::SharedPtr const msg)
+    {
+      _target_linear_velocity_x = static_cast<double>(msg->linear.x) * m/s;
+      _target_linear_velocity_y = static_cast<double>(msg->linear.y) * m/s;
+      _target_linear_velocity_z = static_cast<double>(msg->linear.z) * m/s;
+
+      _target_angular_velocity_x = static_cast<double>(msg->angular.x) * rad/s;
+      _target_angular_velocity_y = static_cast<double>(msg->angular.y) * rad/s;
+      _target_angular_velocity_z = static_cast<double>(msg->angular.z) * rad/s;
+    },
+    _teleop_sub_options);
 }
 
 void Node::ctrl_loop()
