@@ -74,6 +74,9 @@ private:
   quantity<rad/s> _target_angular_velocity_x, _target_angular_velocity_y, _target_angular_velocity_z;
   void init_teleop_sub();
 
+  static uint16_t constexpr CYPHAL_DEMO_PORT_ID = 1234;
+  cyphal::Publisher<uavcan::primitive::scalar::Integer8_1_0> _cyphal_demo_pub;
+
   static std::chrono::milliseconds constexpr CTRL_LOOP_RATE{10};
   rclcpp::TimerBase::SharedPtr _ctrl_loop_timer;
   void ctrl_loop();

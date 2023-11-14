@@ -74,6 +74,8 @@ Node::Node()
 
   _ctrl_loop_timer = create_wall_timer(CTRL_LOOP_RATE, [this]() { this->ctrl_loop(); });
 
+  _cyphal_demo_pub = _node_hdl.create_publisher<uavcan::primitive::scalar::Integer8_1_0>(CYPHAL_DEMO_PORT_ID, 1*1000*1000UL);
+
   RCLCPP_INFO(get_logger(), "%s init complete.", get_name());
 }
 
@@ -190,6 +192,10 @@ void Node::init_teleop_sub()
 void Node::ctrl_loop()
 {
   /* TODO: implement me ... */
+  static int8_t demo_cnt = 0;
+  uavcan::primitive::scalar::Integer8_1_0 const demo_msg{demo_cnt};
+  _cyphal_demo_pub->publish(demo_msg);
+  demo_cnt++;
 }
 
 /**************************************************************************************
