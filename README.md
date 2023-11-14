@@ -45,8 +45,11 @@ sudo ./docker-run.sh
 | `/cmd_vel`   | [`geometry_msgs/Twist`](http://docs.ros.org/en/api/geometry_msgs/html/msg/Twist.html)  | Linear/angular drone target velocity setpoints |
 
 ##### Parameters
-|                      Name                      |       Default        | Description                                                             |
-|:----------------------------------------------:|:--------------------:|-------------------------------------------------------------------------|
+|                   Name                    | Default  | Description                                                                  |
+|:-----------------------------------------:|:--------:|------------------------------------------------------------------------------|
+|              `teleop_topic`               | `teleop` | Name of topic from where we are subscribing teleop messages.                 |
+|        `teleop_topic_deadline_ms`         |   100    | Deadline in milliseconds within which a new teleop message is expected.      |
+| `teleop_topic_liveliness_lease_duration`  |   1000   | The time within which the RMW node or publisher must show that it is alive.  | 
 
 #### Install dependencies
 * Install `gsl-lite`
