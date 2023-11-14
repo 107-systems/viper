@@ -44,4 +44,5 @@ sudo -u fio ifconfig $CAN
 docker run -it \
    -u 0 \
    --privileged \
-   --network host
+   --network host \
+   pika_spark_docker_build_and_run
