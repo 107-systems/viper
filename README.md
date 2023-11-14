@@ -11,37 +11,7 @@ Generic ROS based drone flight stack for the [Pika Spark](https://pika-spark.io/
 </p>
 
 #### How-to-build
-* Install `gsl-lite`
-```bash
-git clone https://github.com/gsl-lite/gsl-lite && cd gsl-lite
-mkdir build && cd build
-cmake .. && make -j8
-sudo make install
-```
-* Install `Catch2`
-```bash
-git clone https://github.com/catchorg/Catch2 && cd Catch2
-mkdir build && cd build
-cmake .. && make -j8
-sudo make install
-```
-* Install `fmt`
-```bash
-git clone https://github.com/fmtlib/fmt && cd fmt
-mkdir build && cd build
-cmake -DFMT_TEST=OFF ..
-make -j8
-sudo make install
-```
-* Install `mp-units`
-```bash
-git clone https://github.com/mpusz/mp-units && cd mp-units
-mkdir build && cd build
-cmake -DMP_UNITS_AS_SYSTEM_HEADERS=ON -DMP_UNITS_BUILD_LA=OFF ..
-make -j8
-sudo make install
-```
-* Build with `colcon`
+Note: Don't forget to install the [dependencies](https://github.com/107-systems/viper#install-dependencies) (see at the end of this file).
 ```bash
 cd $COLCON_WS/src
 git clone https://github.com/107-systems/viper
@@ -78,3 +48,34 @@ sudo ./docker-run.sh
 |                      Name                      |       Default        | Description                                                             |
 |:----------------------------------------------:|:--------------------:|-------------------------------------------------------------------------|
 
+#### Install dependencies
+* Install `gsl-lite`
+```bash
+git clone https://github.com/gsl-lite/gsl-lite && cd gsl-lite
+mkdir build && cd build
+cmake .. && make -j8
+sudo make install
+```
+* Install `Catch2`
+```bash
+git clone https://github.com/catchorg/Catch2 && cd Catch2
+mkdir build && cd build
+cmake .. && make -j8
+sudo make install
+```
+* Install `fmt`
+```bash
+git clone https://github.com/fmtlib/fmt && cd fmt
+mkdir build && cd build
+cmake -DFMT_TEST=OFF ..
+make -j8
+sudo make install
+```
+* Install `mp-units`
+```bash
+git clone https://github.com/mpusz/mp-units && cd mp-units
+mkdir build && cd build
+cmake -DMP_UNITS_AS_SYSTEM_HEADERS=ON -DMP_UNITS_BUILD_LA=OFF ..
+make -j8
+sudo make install
+```
