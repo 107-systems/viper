@@ -54,7 +54,7 @@ colcon build --packages-select viper
 ```bash
 cd $COLCON_WS
 . install/setup.bash
-ros2 launch viper viper.py
+ros2 launch viper viper-quad.py
 ```
 
 #### How-to-Docker
