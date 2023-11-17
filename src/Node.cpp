@@ -70,6 +70,13 @@ Node::Node()
       _node_hdl.onCanFrameReceived(frame);
     });
 
+  _node_loop_timer = create_wall_timer(NODE_LOOP_RATE,
+                                       [this]()
+                                       {
+                                         std::lock_guard <std::mutex> lock(_node_mtx);
+                                         _node_hdl.spinSome();
+                                       });
+
   init_teleop_sub();
 
   _ctrl_loop_timer = create_wall_timer(CTRL_LOOP_RATE, [this]() { this->ctrl_loop(); });

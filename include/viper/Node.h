@@ -56,6 +56,8 @@ private:
   std::mutex _node_mtx;
   std::chrono::steady_clock::time_point const _node_start;
   std::unique_ptr<CanManager> _can_mgr;
+  static std::chrono::milliseconds constexpr NODE_LOOP_RATE{1};
+  rclcpp::TimerBase::SharedPtr _node_loop_timer;
 
   cyphal::Publisher<uavcan::node::Heartbeat_1_0> _cyphal_heartbeat_pub;
   std::chrono::steady_clock::time_point _prev_heartbeat_timepoint;
