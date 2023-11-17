@@ -27,13 +27,6 @@ cd $COLCON_WS
 ros2 launch viper viper-quad.py
 ```
 
-#### How-to-Docker
-This section is for building and executing this ROS node on the [Pika Spark](https://pika-spark.io/) via [Docker](https://www.docker.com/). You have to `cd docker/build-and-run` or `cd docker/devel` and then build and run the docker container.
-```bash
-./docker-build.sh
-sudo ./docker-run.sh
-```
-
 #### Interface Documentation
 ##### Published Topics
 | Default name |                                      Type                                      |
