@@ -36,14 +36,14 @@ yakut monitor
 ```
 * Edit [viper-quad.py](launch/viper-quad.py):
 ```diff
--        {'can_iface' : 'can0'},
-+        {'can_iface' : 'vcan0'},
+-{'can_iface' : 'can0'},
++{'can_iface' : 'vcan0'},
 ```
 * Run via `ros2 launch`:
 ```bash
 cd $COLCON_WS/src
 . install/setup.bash
-ros2 launch viper viper-quad-sim.py
+ros2 launch viper viper-quad.py
 ```
 
 #### Interface Documentation
