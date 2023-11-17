@@ -27,6 +27,18 @@ cd $COLCON_WS
 ros2 launch viper viper-quad.py
 ```
 
+#### How-to-run (simulation)
+```bash
+cd $COLCON_WS/src
+. setup_yakut.sh
+yakut monitor
+```
+```bash
+cd $COLCON_WS
+. install/setup.bash
+ros2 launch viper viper-quad-sum.py
+```
+
 #### Interface Documentation
 ##### Published Topics
 | Default name |                                      Type                                      |
