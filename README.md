@@ -14,7 +14,7 @@ Generic ROS based drone flight stack for the [Pika Spark](https://pika-spark.io/
 Note: Don't forget to install the [dependencies](https://github.com/107-systems/viper#install-dependencies) (see at the end of this file).
 ```bash
 cd $COLCON_WS/src
-git clone https://github.com/107-systems/viper
+git clone --recursive https://github.com/107-systems/viper
 cd $COLCON_WS
 source /opt/ros/humble/setup.bash
 colcon build --packages-select viper
@@ -71,14 +71,6 @@ sudo make install
 git clone https://github.com/fmtlib/fmt && cd fmt
 mkdir build && cd build
 cmake -DFMT_TEST=OFF ..
-make -j8
-sudo make install
-```
-* Install `mp-units`
-```bash
-git clone https://github.com/mpusz/mp-units && cd mp-units
-mkdir build && cd build
-cmake -DMP_UNITS_AS_SYSTEM_HEADERS=ON -DMP_UNITS_BUILD_LA=OFF ..
 make -j8
 sudo make install
 ```

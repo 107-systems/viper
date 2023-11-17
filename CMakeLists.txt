@@ -13,14 +13,12 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
-find_package(mp-units REQUIRED)
 ##########################################################################
 add_subdirectory(external/107-Arduino-Cyphal)
 add_subdirectory(external/libsocketcan)
+add_subdirectory(external/mp-units/src)
 #######################################################################################
-include_directories(
-  include
-)
+include_directories(include)
 #######################################################################################
 add_executable(${VIPER_TARGET}
   src/CanManager.cpp
@@ -28,12 +26,10 @@ add_executable(${VIPER_TARGET}
   src/main.cpp
 )
 #######################################################################################
-target_link_libraries(${VIPER_TARGET}
-  cyphal++ socketcan
-)
+target_link_libraries(${VIPER_TARGET} cyphal++ socketcan mp-units)
 #######################################################################################
 target_compile_features(${VIPER_TARGET} PRIVATE cxx_std_20)
-ament_target_dependencies(${VIPER_TARGET} rclcpp std_msgs geometry_msgs mp-units)
+ament_target_dependencies(${VIPER_TARGET} rclcpp std_msgs geometry_msgs)
 #######################################################################################
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)

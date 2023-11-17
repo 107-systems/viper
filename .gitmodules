@@ -1,3 +1,6 @@
 [submodule "external/107-Arduino-Cyphal"]
 	path = external/107-Arduino-Cyphal
 	url = https://github.com/107-systems/107-Arduino-Cyphal
+[submodule "external/mp-units"]
+	path = external/mp-units
+	url = https://github.com/mpusz/mp-units
