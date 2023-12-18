@@ -41,7 +41,7 @@ yakut monitor
 ```
 * Run via `ros2 launch`:
 ```bash
-cd $COLCON_WS/src
+cd $COLCON_WS
 . install/setup.bash
 ros2 launch viper viper-quad.py
 ```
