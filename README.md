@@ -35,6 +35,11 @@ cd $COLCON_WS/src
 . setup_yakut_vcan.sh
 yakut monitor
 ```
+* Edit [viper-quad.py](launch/viper-quad.py):
+```diff
+-{'can_iface' : 'can0'},
++{'can_iface' : 'vcan0'},
+```
 * Run via `ros2 launch`:
 ```bash
 cd $COLCON_WS
