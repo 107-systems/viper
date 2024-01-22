@@ -26,18 +26,14 @@ cd $COLCON_WS
 . install/setup.bash
 ros2 launch viper viper-quad.py
 ```
+**Note**: If you use the Zubax Babel as a USB-CAN device you need to run `. setup_yakut_slcan.sh` first.
 
 #### How-to-run (simulation)
 * Setup [yakut](https://github.com/OpenCyphal/yakut):
 ```bash
 cd $COLCON_WS/src
-. setup_yakut.sh
+. setup_yakut_vcan.sh
 yakut monitor
-```
-* Edit [viper-quad.py](launch/viper-quad.py):
-```diff
--{'can_iface' : 'can0'},
-+{'can_iface' : 'vcan0'},
 ```
 * Run via `ros2 launch`:
 ```bash
