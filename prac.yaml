@@ -1,0 +1,397 @@
+122: {}
+123:
+  aux.ctl.1_rcpwm.deadband: 9.999999747378752e-05
+  aux.ctl.1_rcpwm.rev_mid_fwd: [0.0010000000474974513, 0.001500000013038516, 0.0020000000949949026]
+  aux.ctl.2_voltage.deadband: 0.15000000596046448
+  aux.ctl.2_voltage.rev_mid_fwd: [0.0, 1.649999976158142, 3.299999952316284]
+  aux.ctl.dead0: false
+  aux.ctl.mode: ''
+  aux.ctl.type: 0
+  aux.power_output: false
+  aux.pull: 1
+  drive.current_brake_pu: 0.20000000298023224
+  drive.flux_weakening.bemf_pid: [4.0, 2.0, 0.009999999776482582]
+  drive.flux_weakening.voltage_boost: 1.0
+  drive.observer.0_ekf.proc_noise: [1000000.0, 3000000.0, 100000000.0]
+  drive.observer.0_ekf.sched_factor: [0.800000011920929, 0.949999988079071]
+  drive.observer.1_mras.gain: 1000.0
+  drive.observer.type: 0
+  drive.pre_calibrate: false
+  drive.runner.0_ramp.spinup_current_pu: [0.5, 0.5]
+  drive.runner.0_ramp.spinup_duration: [0.20000000298023224, 0.4000000059604645, 1.5, 0.0020000000949949026, 0.014999999664723873, 0.6000000238418579]
+  drive.runner.0_ramp.velocity_stall_spinup: [5.0, 20.0]
+  drive.runner.1_passive.delay: 0.20000000298023224
+  drive.runner.1_passive.velocity_off_on: [10.0, 20.0]
+  drive.runner.type: 0
+  drive.stall_limit: 20
+  drive.velocity_ctl.1_pid.feedforward: [0.0, 0.0]
+  drive.velocity_ctl.1_pid.gain: [0.0, 0.0, 0.0]
+  drive.velocity_ctl.2_indi.acceleration_pi: [50.0, 0.0]
+  drive.velocity_ctl.2_indi.mass: 9.999999747378752e-06
+  drive.velocity_ctl.acceleration: [-2000.0, 3000.0]
+  drive.velocity_ctl.type: 2
+  drive.voltage_clipping: false
+  mns.deadman_timeout: 0.5
+  mns.local_timestamp: false
+  mns.pub_interval_min: 0.05000000074505806
+  mns.ratiometric_setpoint_min: 0.0
+  mns.ratiometric_to_absolute_mul: 0.0
+  mns.setpoint_index: 0
+  mns.status_period: 1.0
+  motor.current_ctl_bwr: 0.05000000074505806
+  motor.current_max: 59.0
+  motor.current_ramp: 5000.0
+  motor.flux_linkage: 0.0008227403741329908
+  motor.inductance_dq: [1.5992691260180436e-06, 1.5992691260180436e-06]
+  motor.mechanical_ratio: 12
+  motor.resistance: 0.011695253662765026
+  motor.thermistor_v2k: [0.0, 0.0, 0.0]
+  motor.voltage_ramp: 20.0
+  servo.profile.acceleration: [-200.0, 100.0]
+  servo.profile.jerk: 2000.0
+  servo.profile.velocity: [-50.0, 50.0]
+  standby.brake_voltage: .nan
+  sys.debug: false
+  sys.golden: sys. vsi.
+  uavcan.can.bitrate: [1000000, 1000000]
+  uavcan.can.count: 1
+  uavcan.node.description: ''
+  uavcan.node.id: 123
+  uavcan.pub.compact.id: 65535
+  uavcan.pub.compact.prio: 3
+  uavcan.pub.dq.id: 65535
+  uavcan.pub.dq.prio: 3
+  uavcan.pub.dynamics.id: 100
+  uavcan.pub.dynamics.prio: 3
+  uavcan.pub.feedback.id: 102
+  uavcan.pub.feedback.prio: 3
+  uavcan.pub.power.id: 101
+  uavcan.pub.power.prio: 3
+  uavcan.pub.status.id: 65535
+  uavcan.pub.status.prio: 4
+  uavcan.pub.temperature.id: 65535
+  uavcan.pub.temperature.prio: 5
+  uavcan.srv.low_level_io.id: 65535
+  uavcan.sub.readiness.id: 65535
+  uavcan.sub.setpoint_dynamics.id: 65535
+  uavcan.sub.setpoint_rat_torque.id: 111
+  uavcan.sub.setpoint_rat_torque_u9.id: 110
+  uavcan.sub.setpoint_rat_velocity_u9.id: 65535
+  uavcan.sub.setpoint_rat_voltage.id: 112
+  uavcan.sub.setpoint_rat_voltage_u9.id: 65535
+  uavcan.sub.setpoint_servo.id: 65535
+  uavcan.sub.setpoint_velocity.id: 113
+  vsi.activation_latency: 0.009999999776482582
+  vsi.bridge_resistance: [0.0020000000949949026, 0.003000000026077032, 0.0020000000949949026, 0.003000000026077032, 0.0020000000949949026, 0.0020000000949949026]
+  vsi.calibration_duration: 2.0
+  vsi.dc_voltage_gain: 18.799999237060547
+  vsi.hw_fault_latency: 0.10000000149011612
+  vsi.phase_current_gain: [100.0, 100.0, 25.0, 25.0]
+  vsi.phase_current_gain_attack_decay: [1.5, 0.36000001430511475]
+  vsi.phase_current_gain_decay_time: 0.10000000149011612
+  vsi.phase_current_sampling_window: 1.9000000293090125e-06
+  vsi.phase_current_stderr: [0.30000001192092896, 0.30000001192092896, 0.20000000298023224, 0.20000000298023224]
+  vsi.pwm_dead_time: 0.0
+  vsi.pwm_freq_mul_log2: 0
+  vsi.shortest_time_in_disabled_state: 1.9999999494757503e-05
+  vsi.swap_ab: false
+  vsi.thermistor_v2k: [223.14999389648438, 100.0, 0.0]
+  vsi.tick_freq: 29402.15625
+  zubax.cookie: ''
+124:
+  aux.ctl.1_rcpwm.deadband: 9.999999747378752e-05
+  aux.ctl.1_rcpwm.rev_mid_fwd: [0.0010000000474974513, 0.001500000013038516, 0.0020000000949949026]
+  aux.ctl.2_voltage.deadband: 0.15000000596046448
+  aux.ctl.2_voltage.rev_mid_fwd: [0.0, 1.649999976158142, 3.299999952316284]
+  aux.ctl.dead0: false
+  aux.ctl.mode: ''
+  aux.ctl.type: 0
+  aux.power_output: false
+  aux.pull: 1
+  drive.current_brake_pu: 0.20000000298023224
+  drive.flux_weakening.bemf_pid: [4.0, 2.0, 0.009999999776482582]
+  drive.flux_weakening.voltage_boost: 1.0
+  drive.observer.0_ekf.proc_noise: [1000000.0, 3000000.0, 100000000.0]
+  drive.observer.0_ekf.sched_factor: [0.800000011920929, 0.949999988079071]
+  drive.observer.1_mras.gain: 1000.0
+  drive.observer.type: 0
+  drive.pre_calibrate: false
+  drive.runner.0_ramp.spinup_current_pu: [0.5, 0.5]
+  drive.runner.0_ramp.spinup_duration: [0.20000000298023224, 0.4000000059604645, 1.5, 0.0020000000949949026, 0.014999999664723873, 0.6000000238418579]
+  drive.runner.0_ramp.velocity_stall_spinup: [5.0, 20.0]
+  drive.runner.1_passive.delay: 0.20000000298023224
+  drive.runner.1_passive.velocity_off_on: [10.0, 20.0]
+  drive.runner.type: 0
+  drive.stall_limit: 20
+  drive.velocity_ctl.1_pid.feedforward: [0.0, 0.0]
+  drive.velocity_ctl.1_pid.gain: [0.0, 0.0, 0.0]
+  drive.velocity_ctl.2_indi.acceleration_pi: [50.0, 0.0]
+  drive.velocity_ctl.2_indi.mass: 9.999999747378752e-06
+  drive.velocity_ctl.acceleration: [-2000.0, 3000.0]
+  drive.velocity_ctl.type: 2
+  drive.voltage_clipping: false
+  mns.deadman_timeout: 0.5
+  mns.local_timestamp: false
+  mns.pub_interval_min: 0.05000000074505806
+  mns.ratiometric_setpoint_min: 0.0
+  mns.ratiometric_to_absolute_mul: 0.0
+  mns.setpoint_index: 0
+  mns.status_period: 1.0
+  motor.current_ctl_bwr: 0.05000000074505806
+  motor.current_max: 59.0
+  motor.current_ramp: 5000.0
+  motor.flux_linkage: 0.0008264124044217169
+  motor.inductance_dq: [1.621233764126373e-06, 1.621233764126373e-06]
+  motor.mechanical_ratio: 12
+  motor.resistance: 0.01173351239413023
+  motor.thermistor_v2k: [0.0, 0.0, 0.0]
+  motor.voltage_ramp: 20.0
+  servo.profile.acceleration: [-200.0, 100.0]
+  servo.profile.jerk: 2000.0
+  servo.profile.velocity: [-50.0, 50.0]
+  standby.brake_voltage: .nan
+  sys.debug: false
+  sys.golden: sys. vsi.
+  uavcan.can.bitrate: [1000000, 1000000]
+  uavcan.can.count: 1
+  uavcan.node.description: ''
+  uavcan.node.id: 124
+  uavcan.pub.compact.id: 65535
+  uavcan.pub.compact.prio: 3
+  uavcan.pub.dq.id: 65535
+  uavcan.pub.dq.prio: 3
+  uavcan.pub.dynamics.id: 100
+  uavcan.pub.dynamics.prio: 3
+  uavcan.pub.feedback.id: 102
+  uavcan.pub.feedback.prio: 3
+  uavcan.pub.power.id: 101
+  uavcan.pub.power.prio: 3
+  uavcan.pub.status.id: 65535
+  uavcan.pub.status.prio: 4
+  uavcan.pub.temperature.id: 65535
+  uavcan.pub.temperature.prio: 5
+  uavcan.srv.low_level_io.id: 65535
+  uavcan.sub.readiness.id: 65535
+  uavcan.sub.setpoint_dynamics.id: 65535
+  uavcan.sub.setpoint_rat_torque.id: 111
+  uavcan.sub.setpoint_rat_torque_u9.id: 110
+  uavcan.sub.setpoint_rat_velocity_u9.id: 65535
+  uavcan.sub.setpoint_rat_voltage.id: 112
+  uavcan.sub.setpoint_rat_voltage_u9.id: 65535
+  uavcan.sub.setpoint_servo.id: 65535
+  uavcan.sub.setpoint_velocity.id: 114
+  vsi.activation_latency: 0.009999999776482582
+  vsi.bridge_resistance: [0.0020000000949949026, 0.003000000026077032, 0.0020000000949949026, 0.003000000026077032, 0.0020000000949949026, 0.0020000000949949026]
+  vsi.calibration_duration: 2.0
+  vsi.dc_voltage_gain: 18.799999237060547
+  vsi.hw_fault_latency: 0.10000000149011612
+  vsi.phase_current_gain: [100.0, 100.0, 25.0, 25.0]
+  vsi.phase_current_gain_attack_decay: [1.5, 0.36000001430511475]
+  vsi.phase_current_gain_decay_time: 0.10000000149011612
+  vsi.phase_current_sampling_window: 1.9000000293090125e-06
+  vsi.phase_current_stderr: [0.30000001192092896, 0.30000001192092896, 0.20000000298023224, 0.20000000298023224]
+  vsi.pwm_dead_time: 0.0
+  vsi.pwm_freq_mul_log2: 0
+  vsi.shortest_time_in_disabled_state: 1.9999999494757503e-05
+  vsi.swap_ab: false
+  vsi.thermistor_v2k: [223.14999389648438, 100.0, 0.0]
+  vsi.tick_freq: 29402.15625
+  zubax.cookie: ''
+125:
+  aux.ctl.1_rcpwm.deadband: 9.999999747378752e-05
+  aux.ctl.1_rcpwm.rev_mid_fwd: [0.0010000000474974513, 0.001500000013038516, 0.0020000000949949026]
+  aux.ctl.2_voltage.deadband: 0.15000000596046448
+  aux.ctl.2_voltage.rev_mid_fwd: [0.0, 1.649999976158142, 3.299999952316284]
+  aux.ctl.dead0: false
+  aux.ctl.mode: ''
+  aux.ctl.type: 0
+  aux.power_output: false
+  aux.pull: 1
+  drive.current_brake_pu: 0.20000000298023224
+  drive.flux_weakening.bemf_pid: [4.0, 2.0, 0.009999999776482582]
+  drive.flux_weakening.voltage_boost: 1.0
+  drive.observer.0_ekf.proc_noise: [1000000.0, 3000000.0, 100000000.0]
+  drive.observer.0_ekf.sched_factor: [0.800000011920929, 0.949999988079071]
+  drive.observer.1_mras.gain: 1000.0
+  drive.observer.type: 0
+  drive.pre_calibrate: false
+  drive.runner.0_ramp.spinup_current_pu: [0.5, 0.5]
+  drive.runner.0_ramp.spinup_duration: [0.20000000298023224, 0.4000000059604645, 1.5, 0.0020000000949949026, 0.014999999664723873, 0.6000000238418579]
+  drive.runner.0_ramp.velocity_stall_spinup: [5.0, 20.0]
+  drive.runner.1_passive.delay: 0.20000000298023224
+  drive.runner.1_passive.velocity_off_on: [10.0, 20.0]
+  drive.runner.type: 0
+  drive.stall_limit: 20
+  drive.velocity_ctl.1_pid.feedforward: [0.0, 0.0]
+  drive.velocity_ctl.1_pid.gain: [0.0, 0.0, 0.0]
+  drive.velocity_ctl.2_indi.acceleration_pi: [50.0, 0.0]
+  drive.velocity_ctl.2_indi.mass: 9.999999747378752e-06
+  drive.velocity_ctl.acceleration: [-2000.0, 3000.0]
+  drive.velocity_ctl.type: 2
+  drive.voltage_clipping: false
+  mns.deadman_timeout: 0.5
+  mns.local_timestamp: false
+  mns.pub_interval_min: 0.05000000074505806
+  mns.ratiometric_setpoint_min: 0.0
+  mns.ratiometric_to_absolute_mul: 0.0
+  mns.setpoint_index: 0
+  mns.status_period: 1.0
+  motor.current_ctl_bwr: 0.05000000074505806
+  motor.current_max: 59.0
+  motor.current_ramp: 5000.0
+  motor.flux_linkage: 0.0007803703774698079
+  motor.inductance_dq: [1.6388102039854857e-06, 1.6388102039854857e-06]
+  motor.mechanical_ratio: 12
+  motor.resistance: 0.01189023070037365
+  motor.thermistor_v2k: [0.0, 0.0, 0.0]
+  motor.voltage_ramp: 20.0
+  servo.profile.acceleration: [-200.0, 100.0]
+  servo.profile.jerk: 2000.0
+  servo.profile.velocity: [-50.0, 50.0]
+  standby.brake_voltage: .nan
+  sys.debug: false
+  sys.golden: sys. vsi.
+  uavcan.can.bitrate: [1000000, 1000000]
+  uavcan.can.count: 1
+  uavcan.node.description: ''
+  uavcan.node.id: 125
+  uavcan.pub.compact.id: 65535
+  uavcan.pub.compact.prio: 3
+  uavcan.pub.dq.id: 65535
+  uavcan.pub.dq.prio: 3
+  uavcan.pub.dynamics.id: 100
+  uavcan.pub.dynamics.prio: 3
+  uavcan.pub.feedback.id: 102
+  uavcan.pub.feedback.prio: 3
+  uavcan.pub.power.id: 101
+  uavcan.pub.power.prio: 3
+  uavcan.pub.status.id: 65535
+  uavcan.pub.status.prio: 4
+  uavcan.pub.temperature.id: 65535
+  uavcan.pub.temperature.prio: 5
+  uavcan.srv.low_level_io.id: 65535
+  uavcan.sub.readiness.id: 65535
+  uavcan.sub.setpoint_dynamics.id: 65535
+  uavcan.sub.setpoint_rat_torque.id: 111
+  uavcan.sub.setpoint_rat_torque_u9.id: 110
+  uavcan.sub.setpoint_rat_velocity_u9.id: 65535
+  uavcan.sub.setpoint_rat_voltage.id: 112
+  uavcan.sub.setpoint_rat_voltage_u9.id: 65535
+  uavcan.sub.setpoint_servo.id: 65535
+  uavcan.sub.setpoint_velocity.id: 115
+  vsi.activation_latency: 0.009999999776482582
+  vsi.bridge_resistance: [0.0020000000949949026, 0.003000000026077032, 0.0020000000949949026, 0.003000000026077032, 0.0020000000949949026, 0.0020000000949949026]
+  vsi.calibration_duration: 2.0
+  vsi.dc_voltage_gain: 18.799999237060547
+  vsi.hw_fault_latency: 0.10000000149011612
+  vsi.phase_current_gain: [100.0, 100.0, 25.0, 25.0]
+  vsi.phase_current_gain_attack_decay: [1.5, 0.36000001430511475]
+  vsi.phase_current_gain_decay_time: 0.10000000149011612
+  vsi.phase_current_sampling_window: 1.9000000293090125e-06
+  vsi.phase_current_stderr: [0.30000001192092896, 0.30000001192092896, 0.20000000298023224, 0.20000000298023224]
+  vsi.pwm_dead_time: 0.0
+  vsi.pwm_freq_mul_log2: 0
+  vsi.shortest_time_in_disabled_state: 1.9999999494757503e-05
+  vsi.swap_ab: false
+  vsi.thermistor_v2k: [223.14999389648438, 100.0, 0.0]
+  vsi.tick_freq: 29402.15625
+  zubax.cookie: ''
+126:
+  aux.ctl.1_rcpwm.deadband: 9.999999747378752e-05
+  aux.ctl.1_rcpwm.rev_mid_fwd: [0.0010000000474974513, 0.001500000013038516, 0.0020000000949949026]
+  aux.ctl.2_voltage.deadband: 0.15000000596046448
+  aux.ctl.2_voltage.rev_mid_fwd: [0.0, 1.649999976158142, 3.299999952316284]
+  aux.ctl.dead0: false
+  aux.ctl.mode: ''
+  aux.ctl.type: 0
+  aux.power_output: false
+  aux.pull: 1
+  drive.current_brake_pu: 0.20000000298023224
+  drive.flux_weakening.bemf_pid: [4.0, 2.0, 0.009999999776482582]
+  drive.flux_weakening.voltage_boost: 1.0
+  drive.observer.0_ekf.proc_noise: [1000000.0, 3000000.0, 100000000.0]
+  drive.observer.0_ekf.sched_factor: [0.800000011920929, 0.949999988079071]
+  drive.observer.1_mras.gain: 1000.0
+  drive.observer.type: 0
+  drive.pre_calibrate: false
+  drive.runner.0_ramp.spinup_current_pu: [0.5, 0.5]
+  drive.runner.0_ramp.spinup_duration: [0.20000000298023224, 0.4000000059604645, 1.5, 0.0020000000949949026, 0.014999999664723873, 0.6000000238418579]
+  drive.runner.0_ramp.velocity_stall_spinup: [5.0, 20.0]
+  drive.runner.1_passive.delay: 0.20000000298023224
+  drive.runner.1_passive.velocity_off_on: [10.0, 20.0]
+  drive.runner.type: 0
+  drive.stall_limit: 20
+  drive.velocity_ctl.1_pid.feedforward: [0.0, 0.0]
+  drive.velocity_ctl.1_pid.gain: [0.0, 0.0, 0.0]
+  drive.velocity_ctl.2_indi.acceleration_pi: [50.0, 0.0]
+  drive.velocity_ctl.2_indi.mass: 9.999999747378752e-06
+  drive.velocity_ctl.acceleration: [-2000.0, 3000.0]
+  drive.velocity_ctl.type: 2
+  drive.voltage_clipping: false
+  mns.deadman_timeout: 0.5
+  mns.local_timestamp: false
+  mns.pub_interval_min: 0.05000000074505806
+  mns.ratiometric_setpoint_min: 0.0
+  mns.ratiometric_to_absolute_mul: 0.0
+  mns.setpoint_index: 0
+  mns.status_period: 1.0
+  motor.current_ctl_bwr: 0.05000000074505806
+  motor.current_max: 59.0
+  motor.current_ramp: 5000.0
+  motor.flux_linkage: 0.0008214705158025026
+  motor.inductance_dq: [1.6596793557255296e-06, 1.6596793557255296e-06]
+  motor.mechanical_ratio: 12
+  motor.resistance: 0.01172245666384697
+  motor.thermistor_v2k: [0.0, 0.0, 0.0]
+  motor.voltage_ramp: 20.0
+  servo.profile.acceleration: [-200.0, 100.0]
+  servo.profile.jerk: 2000.0
+  servo.profile.velocity: [-50.0, 50.0]
+  standby.brake_voltage: .nan
+  sys.debug: false
+  sys.golden: sys. vsi.
+  uavcan.can.bitrate: [1000000, 1000000]
+  uavcan.can.count: 1
+  uavcan.node.description: ''
+  uavcan.node.id: 126
+  uavcan.pub.compact.id: 65535
+  uavcan.pub.compact.prio: 3
+  uavcan.pub.dq.id: 65535
+  uavcan.pub.dq.prio: 3
+  uavcan.pub.dynamics.id: 100
+  uavcan.pub.dynamics.prio: 3
+  uavcan.pub.feedback.id: 102
+  uavcan.pub.feedback.prio: 3
+  uavcan.pub.power.id: 101
+  uavcan.pub.power.prio: 3
+  uavcan.pub.status.id: 65535
+  uavcan.pub.status.prio: 4
+  uavcan.pub.temperature.id: 65535
+  uavcan.pub.temperature.prio: 5
+  uavcan.srv.low_level_io.id: 65535
+  uavcan.sub.readiness.id: 65535
+  uavcan.sub.setpoint_dynamics.id: 65535
+  uavcan.sub.setpoint_rat_torque.id: 111
+  uavcan.sub.setpoint_rat_torque_u9.id: 110
+  uavcan.sub.setpoint_rat_velocity_u9.id: 65535
+  uavcan.sub.setpoint_rat_voltage.id: 112
+  uavcan.sub.setpoint_rat_voltage_u9.id: 65535
+  uavcan.sub.setpoint_servo.id: 65535
+  uavcan.sub.setpoint_velocity.id: 116
+  vsi.activation_latency: 0.009999999776482582
+  vsi.bridge_resistance: [0.0020000000949949026, 0.003000000026077032, 0.0020000000949949026, 0.003000000026077032, 0.0020000000949949026, 0.0020000000949949026]
+  vsi.calibration_duration: 2.0
+  vsi.dc_voltage_gain: 18.799999237060547
+  vsi.hw_fault_latency: 0.10000000149011612
+  vsi.phase_current_gain: [100.0, 100.0, 25.0, 25.0]
+  vsi.phase_current_gain_attack_decay: [1.5, 0.36000001430511475]
+  vsi.phase_current_gain_decay_time: 0.10000000149011612
+  vsi.phase_current_sampling_window: 1.9000000293090125e-06
+  vsi.phase_current_stderr: [0.30000001192092896, 0.30000001192092896, 0.20000000298023224, 0.20000000298023224]
+  vsi.pwm_dead_time: 0.0
+  vsi.pwm_freq_mul_log2: 0
+  vsi.shortest_time_in_disabled_state: 1.9999999494757503e-05
+  vsi.swap_ab: false
+  vsi.thermistor_v2k: [223.14999389648438, 100.0, 0.0]
+  vsi.tick_freq: 29402.15625
+  zubax.cookie: ''

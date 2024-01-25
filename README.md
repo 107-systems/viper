@@ -13,9 +13,9 @@ Generic ROS based drone flight stack for the [Pika Spark](https://pika-spark.io/
 #### How-to-build
 Note: Don't forget to install the [dependencies](https://github.com/107-systems/viper#install-dependencies) (see at the end of this file).
 ```bash
-cd $COLCON_WS/src
-git clone --recursive https://github.com/107-systems/viper
-cd $COLCON_WS
+cd Documents/DEV/src
+git clone --recursive https://github.com/inusha47/viper-WOP.git
+cd Documents/DEV
 source /opt/ros/humble/setup.bash
 colcon build --packages-select viper
 ```

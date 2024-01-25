@@ -10,7 +10,7 @@ else
 fi
 
 if ! [ -e /sys/class/net/can0 ]; then
-    sudo ./setup_slcan.sh --remove-all --basename can --speed-code 5 /dev/serial/by-id/usb-Zubax*Babel*
+    sudo ./setup_slcan.sh --remove-all --basename can --speed-code 8 /dev/serial/by-id/usb-Zubax*Babel*
 fi
 export UAVCAN__CAN__IFACE='socketcan:can0'
 
