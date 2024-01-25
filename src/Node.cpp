@@ -56,7 +56,7 @@ Node::Node()
   declare_parameter("can_node_id", 100);
 
   RCLCPP_INFO(get_logger(),
-              "configuring CAN bus:\n\tDevice: %s\n\tNode Id: %ld",
+              "configuring CANZ bus:\n\tDevice: %s\n\tNode Id: %ld",
               get_parameter("can_iface").as_string().c_str(),
               get_parameter("can_node_id").as_int());
 
