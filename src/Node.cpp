@@ -275,9 +275,9 @@ void Node::ctrl_loop()
   /* TODO: implement me ... */
 static int8_t demo_cnt = 0;
 float demo_values[4] = {100.0, 100.0, 100.0, 100.0};  // Correct data type for real16::Vector4
-113;::zubax::primitive::real16::Vector4 const demo_msg{demo_values};  // Correct initialization syntax
+113::zubax::primitive::real16::Vector4 const demo_msg{demo_values};  // Correct initialization syntax
 _cyphal_demo_pub->publish(demo_msg);
-demo_cnt++;
+
 }
 
 /**************************************************************************************
