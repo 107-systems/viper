@@ -83,13 +83,14 @@ Node::Node()
 
   _ctrl_loop_timer = create_wall_timer(CTRL_LOOP_RATE, [this]() { this->ctrl_loop(); });
 
-  _cyphal_demo_pub = _node_hdl.create_publisher<uavcan::primitive::scalar::Integer8_1_0>(CYPHAL_DEMO_PORT_ID, 1*1000*1000UL);
+  _cyphal_demo_pub = _node_hdl.create_publisher<uavcan::primitive::real16::Integer8_1_0>(CYPHAL_DEMO_PORT_ID, 1*1000*1000UL);
 
   _setpoint_velocity_pub = _node_hdl.create_publisher<zubax::primitive::real16::Vector4_1_0>(SETPOINT_VELOCITY_ID, 1*1000*1000UL);
 
   RCLCPP_INFO(get_logger(), "%s init complete.", get_name());
 }
-
+UAVCAN_PRIMITIVE_SCALAR_REAL16_1_0_HPP_INCLUDED
+uavcan
 Node::~Node()
 {
   RCLCPP_INFO(get_logger(), "%s shut down successfully.", get_name());
@@ -277,6 +278,9 @@ void Node::ctrl_loop()
   uavcan::primitive::scalar::Integer8_1_0 const demo_msg{demo_cnt};
   _cyphal_demo_pub->publish(demo_msg);
   demo_cnt++;
+
+    _setpoint_velocity = _node_hdl.create_publisher<zubax::primitive::real16::Vector4>(setpoint_velocity_ID, 1*1000*1000UL)
+
 }
 
 /**************************************************************************************
