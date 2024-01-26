@@ -56,7 +56,7 @@ Node::Node()
   declare_parameter("can_node_id", 100);
 
   RCLCPP_INFO(get_logger(),
-              "configuring CANT bus:\n\tDevice: %s\n\tNode Id: %ld",
+              "configuring CAN2233 bus:\n\tDevice: %s\n\tNode Id: %ld",
               get_parameter("can_iface").as_string().c_str(),
               get_parameter("can_node_id").as_int());
 
@@ -273,11 +273,10 @@ void Node::init_imu_sub()
 void Node::ctrl_loop()
 {
   /* TODO: implement me ... */
-static int8_t demo_cnt = 0;
-float demo_values[4] = {100.0, 100.0, 100.0, 100.0};  // Correct data type for real16::Vector4
-zubax::primitive::real16::Vector4 const demo_msg{demo_values};  // Correct initialization syntax
-_cyphal_demo_pub->publish(demo_msg);
-
+  static int8_t demo_cnt = 0;
+  uavcan::primitive::scalar::Integer8_1_0 const demo_msg{demo_cnt};
+  _cyphal_demo_pub->publish(demo_msg);
+  demo_cnt++;
 }
 
 /**************************************************************************************
