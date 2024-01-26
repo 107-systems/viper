@@ -56,7 +56,7 @@ Node::Node()
   declare_parameter("can_node_id", 100);
 
   RCLCPP_INFO(get_logger(),
-              "configuring CANZ bus:\n\tDevice: %s\n\tNode Id: %ld",
+              "configuring CANT bus:\n\tDevice: %s\n\tNode Id: %ld",
               get_parameter("can_iface").as_string().c_str(),
               get_parameter("can_node_id").as_int());
 
@@ -275,7 +275,7 @@ void Node::ctrl_loop()
   /* TODO: implement me ... */
 static int8_t demo_cnt = 0;
 float demo_values[4] = {100.0, 100.0, 100.0, 100.0};  // Correct data type for real16::Vector4
-113::zubax::primitive::real16::Vector4 const demo_msg{demo_values};  // Correct initialization syntax
+zubax::primitive::real16::Vector4 const demo_msg{demo_values};  // Correct initialization syntax
 _cyphal_demo_pub->publish(demo_msg);
 
 }
