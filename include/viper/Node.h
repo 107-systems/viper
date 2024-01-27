@@ -93,7 +93,7 @@ private:
 /************** code************/
  
 static uint16_t constexpr setpoint_velocity_ID = 113;
- cyphal::Subscription<uavcan::primitive::real16::Vector4> _setpoint_velocity;
+ cyphal::Publisher<uavcan::primitive::real16::Vector4> _setpoint_velocity;
 
   static std::chrono::milliseconds constexpr CTRL_LOOP_RATE{10};
   rclcpp::TimerBase::SharedPtr _ctrl_loop_timer;
