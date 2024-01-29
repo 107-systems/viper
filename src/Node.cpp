@@ -84,7 +84,7 @@ Node::Node()
   _cyphal_demo_pub = _node_hdl.create_publisher<uavcan::primitive::real16::Integer8_1_0>(CYPHAL_DEMO_PORT_ID, 1*1000*1000UL);
 
  setpoint_velocity_ID= _node_hdl.create_subscription<zubax::primitive::real16::Vector31>(setpoint_velocity_ID,1*1000*1000UL)
-
+/**/
 
   RCLCPP_INFO(get_logger(), "%s init complete.", get_name());
 }
