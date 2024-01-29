@@ -79,6 +79,12 @@ private:
   static uint16_t constexpr CYPHAL_DEMO_PORT_ID = 1234;
   cyphal::Publisher<uavcan::primitive::scalar::Integer8_1_0> _cyphal_demo_pub;
 
+
+/************** code************/
+ 
+static uint16_t constexpr setpoint_velocity_ID = 113;
+ cyphal::Publisher<zubax::primitive::real16::Vector31> setpoint_velocity_ID;
+
   static std::chrono::milliseconds constexpr CTRL_LOOP_RATE{10};
   rclcpp::TimerBase::SharedPtr _ctrl_loop_timer;
   void ctrl_loop();
