@@ -55,7 +55,7 @@ Node::Node()
   declare_parameter("can_node_id", 100);
 
   RCLCPP_INFO(get_logger(),
-              "configuring CAN bus:\n\tDevice: %s\n\tNode Id: %ld",
+              "configuring CAN2233 bus:\n\tDevice: %s\n\tNode Id: %ld",
               get_parameter("can_iface").as_string().c_str(),
               get_parameter("can_node_id").as_int());
 
@@ -81,7 +81,10 @@ Node::Node()
 
   _ctrl_loop_timer = create_wall_timer(CTRL_LOOP_RATE, [this]() { this->ctrl_loop(); });
 
-  _cyphal_demo_pub = _node_hdl.create_publisher<uavcan::primitive::scalar::Integer8_1_0>(CYPHAL_DEMO_PORT_ID, 1*1000*1000UL);
+  _cyphal_demo_pub = _node_hdl.create_publisher<uavcan::primitive::real16::Integer8_1_0>(CYPHAL_DEMO_PORT_ID, 1*1000*1000UL);
+
+ setpoint_velocity_ID= _node_hdl.create_subscription<zubax::primitive::real16::Vector31>(setpoint_velocity_ID,1*1000*1000UL)
+
 
   RCLCPP_INFO(get_logger(), "%s init complete.", get_name());
 }
@@ -221,6 +224,14 @@ void Node::ctrl_loop()
   uavcan::primitive::scalar::Integer8_1_0 const demo_msg{demo_cnt};
   _cyphal_demo_pub->publish(demo_msg);
   demo_cnt++;
+
+setpoint_velocity_ID = _node_hdl.create_publisher<zubax::primitive::real16::Vector31>(setpoint_velocity_ID, 1*1000*1000UL)
+float motor_values[4] = {100.0, 100.0, 100.0, 100.0};
+zubax::primitive::real16::Vector31 const motor_msg{motor_values};
+setpoint_velocity_ID->publish(motor_msg);
+
+
+
 }
 
 /**************************************************************************************
