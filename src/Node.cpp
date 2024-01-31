@@ -279,7 +279,11 @@ void Node::ctrl_loop()
   _cyphal_demo_pub->publish(demo_msg);
   
 
-  zubax::primitive::real16::Vector31_1_0 const motor_msg{100.0, 100.0, 100.0, 100.0};
+  uavcan::equipment::actuator::ArrayCommand_1_0 motor_msg;
+  motor_msg.command.push_back(100.0);
+  motor_msg.command.push_back(100.0);
+  motor_msg.command.push_back(100.0);
+  motor_msg.command.push_back(100.0);
   _setpoint_velocity_pub->publish(motor_msg);
 
 //RCLCPP_INFO(get_logger(), "%s inusha bee.", get_name());/
