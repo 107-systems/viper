@@ -29,10 +29,8 @@ Node::Node()
             [this] () { return micros(); },
             [this] (CanardFrame const & frame) { return _can_mgr->transmit(frame); },
             cyphal::Node::DEFAULT_NODE_ID,
-            get_parameter("can_node_id").as_int()
             CYPHAL_TX_QUEUE_SIZE,
             CYPHAL_RX_QUEUE_SIZE,
-            get_parameter("can_bitrate").as_int(),
             cyphal::Node::DEFAULT_MTU_SIZE}
 , _node_mtx{}
 , _node_start{std::chrono::steady_clock::now()}
@@ -56,7 +54,6 @@ Node::Node()
 
   declare_parameter("can_iface", "can0");
   declare_parameter("can_node_id", 100);
-  declare_parameter("can_bitrate", 1000000); 
 
   RCLCPP_INFO(get_logger(),
               "configuring CAN223 bus:\n\tDevice: %s\n\tNode Id: %ld",
