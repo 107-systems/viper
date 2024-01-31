@@ -13,7 +13,7 @@ def generate_launch_description():
             emulate_tty=True,
             parameters=[
                 {'can_iface': 'can0'},
-                {'can_node_id': 100},
+                {'can_node_id': 123},
                 {'teleop_topic': 'cmd_vel'},
                 {'teleop_topic_deadline_ms': 100},
                 {'teleop_topic_liveliness_lease_duration': 1000},
