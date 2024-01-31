@@ -90,10 +90,10 @@ private:
   static uint16_t constexpr SETPOINT_VELOCITY_ID = 113;
   cyphal::Publisher<zubax::primitive::real16::Vector4_1_0> _setpoint_velocity_pub;
 
-/************** code************/
+
  
   static uint16_t constexpr SETPOINT_VELOCITY_ID = 113;
-  cyphal::Publisher<zubax::primitive::real16::Vector4_1_0> _setpoint_velocity_pub;
+  cyphal::Subscribe<zubax::primitive::real16::Vector31.1.0> _setpoint_velocity_pub;
 
   static std::chrono::milliseconds constexpr CTRL_LOOP_RATE{10};
   rclcpp::TimerBase::SharedPtr _ctrl_loop_timer;

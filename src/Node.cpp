@@ -85,7 +85,7 @@ Node::Node()
 
   _cyphal_demo_pub = _node_hdl.create_publisher<uavcan::primitive::scalar::Integer8_1_0>(CYPHAL_DEMO_PORT_ID, 1*1000*1000UL);
 
-  _setpoint_velocity_pub = _node_hdl.create_publisher<zubax::primitive::real16::Vector4_1_0>(SETPOINT_VELOCITY_ID, 1*1000*1000UL);
+  _setpoint_velocity_pub = _node_hdl.create_publisher<zubax::primitive::real16::Vector31.1.0>(SETPOINT_VELOCITY_ID, 1*1000*1000UL);
 
   RCLCPP_INFO(get_logger(), "%s init complete.", get_name());
 }
@@ -279,10 +279,10 @@ void Node::ctrl_loop()
   _cyphal_demo_pub->publish(demo_msg);
   
 
-  zubax::primitive::real16::Vector4_1_0 const motor_msg{100.0, 100.0, 100.0, 100.0};
+  zubax::primitive::real16::Vector4_1_0 const motor_msg{[100.0, 100.0, 100.0, 100.0]};
   _setpoint_velocity_pub->publish(motor_msg);
 
-RCLCPP_INFO(get_logger(), "%s inusha bee.", get_name());
+//RCLCPP_INFO(get_logger(), "%s inusha bee.", get_name());/
 
   demo_cnt++;
 }
