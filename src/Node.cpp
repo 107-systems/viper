@@ -56,7 +56,7 @@ Node::Node()
   declare_parameter("can_node_id", 100);
 
   RCLCPP_INFO(get_logger(),
-              "configuring CAN2233 bus:\n\tDevice: %s\n\tNode Id: %ld",
+              "configuring CAN223 bus:\n\tDevice: %s\n\tNode Id: %ld",
               get_parameter("can_iface").as_string().c_str(),
               get_parameter("can_node_id").as_int());
 
@@ -118,6 +118,7 @@ void Node::init_cyphal_heartbeat()
                                                 {
                                                   std::lock_guard <std::mutex> lock(_node_mtx);
                                                   _cyphal_heartbeat_pub->publish(msg);
+
                                                 }
                                               });
 }
@@ -276,10 +277,14 @@ void Node::ctrl_loop()
   static int8_t demo_cnt = 0;
   uavcan::primitive::scalar::Integer8_1_0 const demo_msg{demo_cnt};
   _cyphal_demo_pub->publish(demo_msg);
-  demo_cnt++;
+  
 
   zubax::primitive::real16::Vector4_1_0 const motor_msg{100.0, 100.0, 100.0, 100.0};
   _setpoint_velocity_pub->publish(motor_msg);
+
+RCLCPP_INFO(get_logger(), "%s inusha.", get_name());
+
+  demo_cnt++;
 }
 
 /**************************************************************************************
