@@ -282,7 +282,7 @@ void Node::ctrl_loop()
   zubax::primitive::real16::Vector4_1_0 const motor_msg{100.0, 100.0, 100.0, 100.0};
   _setpoint_velocity_pub->publish(motor_msg);
 
-RCLCPP_INFO(get_logger(), "%s inusha bbee.", get_name());
+RCLCPP_INFO(get_logger(), "%s inusha bee.", get_name());
 
   demo_cnt++;
 }
