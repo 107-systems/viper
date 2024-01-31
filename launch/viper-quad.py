@@ -27,7 +27,7 @@ def generate_launch_description():
             output='screen'
                 {'period': 0.1},
                 {'msg': '[100, 100, 100, 100]'},
-                {'topic': '113:zubax.primitive.real16.vector4'},
+                {'topic': '113:zubax.primitive.real16.Vector4'},
             ]
         )
     ])
