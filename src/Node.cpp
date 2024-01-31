@@ -85,7 +85,7 @@ Node::Node()
 
   _cyphal_demo_pub = _node_hdl.create_publisher<uavcan::primitive::scalar::Integer8_1_0>(CYPHAL_DEMO_PORT_ID, 1*1000*1000UL);
 
-  _setpoint_velocity_pub = _node_hdl.create_publisher<zubax::primitive::real16::Vector4_1_0>(SETPOINT_VELOCITY_ID, 1*1000*1000UL);
+  _setpoint_velocity_pub = _node_hdl.create_publisher<zubax::primitive::real16::Vector4_1_0>(SETPOINT_VELOCITY_ID, 1*1000*1000000UL);
 
   RCLCPP_INFO(get_logger(), "%s init complete.", get_name());
 }
@@ -101,7 +101,7 @@ Node::~Node()
 
 void Node::init_cyphal_heartbeat()
 {
-  _cyphal_heartbeat_pub = _node_hdl.create_publisher<uavcan::node::Heartbeat_1_0>(1*1000*1000UL /* = 1 sec in usecs. */);
+  _cyphal_heartbeat_pub = _node_hdl.create_publisher<uavcan::node::Heartbeat_1_0>(1*1000*1000000UL /* = 1 sec in usecs. */);
 
   _cyphal_heartbeat_timer = create_wall_timer(CYPHAL_HEARTBEAT_PERIOD,
                                               [this]()
