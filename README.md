@@ -18,7 +18,7 @@ git clone --recursive https://github.com/107-systems/viper
 cd my_colcon_ws
 cd Documents/DEV/src
 git clone --recursive https://github.com/inusha47/viper-WOP.git
-cd Documents
+cd Documents/DEV
 source /opt/ros/humble/setup.bash
 colcon build --packages-select viper
 ```
