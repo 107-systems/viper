@@ -29,8 +29,10 @@ Node::Node()
             [this] () { return micros(); },
             [this] (CanardFrame const & frame) { return _can_mgr->transmit(frame); },
             cyphal::Node::DEFAULT_NODE_ID,
+            get_parameter("can_node_id").as_int()
             CYPHAL_TX_QUEUE_SIZE,
             CYPHAL_RX_QUEUE_SIZE,
+            get_parameter("can_bitrate").as_int(),
             cyphal::Node::DEFAULT_MTU_SIZE}
 , _node_mtx{}
 , _node_start{std::chrono::steady_clock::now()}
@@ -54,6 +56,7 @@ Node::Node()
 
   declare_parameter("can_iface", "can0");
   declare_parameter("can_node_id", 100);
+  declare_parameter("can_bitrate", 1000000); 
 
   RCLCPP_INFO(get_logger(),
               "configuring CAN223 bus:\n\tDevice: %s\n\tNode Id: %ld",
@@ -85,7 +88,7 @@ Node::Node()
 
   _cyphal_demo_pub = _node_hdl.create_publisher<uavcan::primitive::scalar::Integer8_1_0>(CYPHAL_DEMO_PORT_ID, 1*1000*1000UL);
 
-  _setpoint_velocity_pub = _node_hdl.create_publisher<zubax::primitive::real16::Vector4_1_0>(SETPOINT_VELOCITY_ID, 1*1000*1000000UL);
+  _setpoint_velocity_pub = _node_hdl.create_publisher<zubax::primitive::real16::Vector4_1_0>(SETPOINT_VELOCITY_ID, 1*1000*1000UL);
 
   RCLCPP_INFO(get_logger(), "%s init complete.", get_name());
 }
@@ -101,7 +104,7 @@ Node::~Node()
 
 void Node::init_cyphal_heartbeat()
 {
-  _cyphal_heartbeat_pub = _node_hdl.create_publisher<uavcan::node::Heartbeat_1_0>(1*1000*1000000UL /* = 1 sec in usecs. */);
+  _cyphal_heartbeat_pub = _node_hdl.create_publisher<uavcan::node::Heartbeat_1_0>(1*1000*1000UL /* = 1 sec in usecs. */);
 
   _cyphal_heartbeat_timer = create_wall_timer(CYPHAL_HEARTBEAT_PERIOD,
                                               [this]()
