@@ -28,6 +28,7 @@ def generate_launch_description():
                 {'period': 0.1},
                 {'msg': '[100, 100, 100, 100]'},
                 {'topic': '113:zubax.primitive.real16.Vector4'},
+     
             ]
         )
     ])
