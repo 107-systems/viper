@@ -30,5 +30,9 @@ def generate_launch_description():
                 {'topic': '113:zubax.primitive.real16.Vector4'},
      
             ]
+        ),
+        ExecuteProcess(
+            cmd=['ros2', 'topic', 'echo', 'imu'],
+            output='screen'
         )
     ])
