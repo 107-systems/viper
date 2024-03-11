@@ -12,6 +12,7 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
+find_package(sensor_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 ##########################################################################
 add_subdirectory(external/107-Arduino-Cyphal)
@@ -29,7 +30,7 @@ add_executable(${VIPER_TARGET}
 target_link_libraries(${VIPER_TARGET} cyphal++ socketcan mp-units)
 #######################################################################################
 target_compile_features(${VIPER_TARGET} PRIVATE cxx_std_20)
-ament_target_dependencies(${VIPER_TARGET} rclcpp std_msgs geometry_msgs)
+ament_target_dependencies(${VIPER_TARGET} rclcpp std_msgs sensor_msgs geometry_msgs)
 #######################################################################################
 install(TARGETS ${VIPER_TARGET} DESTINATION lib/${PROJECT_NAME})
 install(DIRECTORY launch DESTINATION share/${PROJECT_NAME})

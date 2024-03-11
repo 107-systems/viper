@@ -17,7 +17,9 @@ def generate_launch_description():
                 {'teleop_topic': 'cmd_vel'},
                 {'teleop_topic_deadline_ms': 100},
                 {'teleop_topic_liveliness_lease_duration': 1000},
-     
+                {'imu_topic': 'imu'},
+                {'imu_topic_deadline_ms': 100},
+                {'imu_topic_liveliness_lease_duration': 1000},
             ]
         ),
         ExecuteProcess(

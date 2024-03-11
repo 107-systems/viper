@@ -47,6 +47,7 @@ Node::Node()
 , _target_angular_velocity_x{0. * rad/s}
 , _target_angular_velocity_y{0. * rad/s}
 , _target_angular_velocity_z{0. * rad/s}
+, _imu_qos_profile{rclcpp::KeepLast(10), rmw_qos_profile_sensor_data}
 {
   init_cyphal_heartbeat();
   init_cyphal_node_info();
@@ -78,6 +79,7 @@ Node::Node()
                                        });
 
   init_teleop_sub();
+  init_imu_sub();
 
   _ctrl_loop_timer = create_wall_timer(CTRL_LOOP_RATE, [this]() { this->ctrl_loop(); });
 
@@ -214,6 +216,58 @@ void Node::init_teleop_sub()
       _target_angular_velocity_z = static_cast<double>(msg->angular.z) * rad/s;
     },
     _teleop_sub_options);
+}
+
+void Node::init_imu_sub()
+{
+  declare_parameter("imu_topic", "imu");
+  declare_parameter("imu_topic_deadline_ms", 100);
+  declare_parameter("imu_topic_liveliness_lease_duration", 1000);
+
+  auto const imu_topic = get_parameter("imu_topic").as_string();
+  auto const imu_topic_deadline = std::chrono::milliseconds(get_parameter("imu_topic_deadline_ms").as_int());
+  auto const imu_topic_liveliness_lease_duration = std::chrono::milliseconds(get_parameter("imu_topic_liveliness_lease_duration").as_int());
+
+  _imu_qos_profile.deadline(imu_topic_deadline);
+  _imu_qos_profile.liveliness(RMW_QOS_POLICY_LIVELINESS_MANUAL_BY_TOPIC);
+  _imu_qos_profile.liveliness_lease_duration(imu_topic_liveliness_lease_duration);
+
+  _imu_sub_options.event_callbacks.deadline_callback =
+    [this, imu_topic](rclcpp::QOSDeadlineRequestedInfo & event) -> void
+    {
+      RCLCPP_ERROR_THROTTLE(get_logger(), *get_clock(), 5*1000UL,
+                            "deadline missed for \"%s\" (total_count: %d, total_count_change: %d).",
+                            imu_topic.c_str(), event.total_count, event.total_count_change);
+    };
+
+  _imu_sub_options.event_callbacks.liveliness_callback =
+    [this, imu_topic](rclcpp::QOSLivelinessChangedInfo & event) -> void
+    {
+      if (event.alive_count > 0)
+      {
+        RCLCPP_INFO(get_logger(), "liveliness gained for \"%s\"", imu_topic.c_str());
+      }
+      else
+      {
+        RCLCPP_WARN(get_logger(), "liveliness lost for \"%s\"", imu_topic.c_str());
+      }
+    };
+
+  _imu_sub = create_subscription<sensor_msgs::msg::Imu>(
+    imu_topic,
+    _imu_qos_profile,
+    [this](sensor_msgs::msg::Imu::SharedPtr const msg)
+    {
+      _imu_data = *msg;
+
+      RCLCPP_INFO(get_logger(),
+                  "IMU Pose (x,y,z,w): %0.2f %0.2f %0.2f %0.2f",
+                  _imu_data.orientation.x,
+                  _imu_data.orientation.y,
+                  _imu_data.orientation.z,
+                  _imu_data.orientation.w);
+    },
+    _imu_sub_options);
 }
 
 void Node::ctrl_loop()
