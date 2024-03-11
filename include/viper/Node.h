@@ -79,9 +79,6 @@ private:
   static uint16_t constexpr CYPHAL_DEMO_PORT_ID = 1234;
   cyphal::Publisher<uavcan::primitive::scalar::Integer8_1_0> _cyphal_demo_pub;
 
-
-
- 
   static uint16_t constexpr SETPOINT_VELOCITY_ID = 113;
   cyphal::Publisher<zubax::primitive::real16::Vector4_1_0> _setpoint_velocity_pub;
 
