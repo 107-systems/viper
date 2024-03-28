@@ -16,6 +16,7 @@
 
 #include <std_msgs/msg/float32.hpp>
 
+#include <sensor_msgs/msg/imu.hpp>
 #include <geometry_msgs/msg/twist.hpp>
 
 #include <cyphal++/cyphal++.h>
@@ -76,8 +77,23 @@ private:
   quantity<rad/s> _target_angular_velocity_x, _target_angular_velocity_y, _target_angular_velocity_z;
   void init_teleop_sub();
 
+  rclcpp::QoS _imu_qos_profile;
+  rclcpp::SubscriptionOptions _imu_sub_options;
+  rclcpp::Subscription<sensor_msgs::msg::Imu>::SharedPtr _imu_sub;
+  sensor_msgs::msg::Imu _imu_data;
+  void init_imu_sub();
+
+
   static uint16_t constexpr CYPHAL_DEMO_PORT_ID = 1234;
   cyphal::Publisher<uavcan::primitive::scalar::Integer8_1_0> _cyphal_demo_pub;
+
+  static uint16_t constexpr SETPOINT_VELOCITY_ID = 113;
+  cyphal::Publisher<zubax::primitive::real16::Vector4_1_0> _setpoint_velocity_pub;
+
+
+ 
+  static uint16_t constexpr SETPOINT_VELOCITY_ID = 113;
+  cyphal::Publisher<zubax::primitive::real16::Vector4_1_0> _setpoint_velocity_pub;
 
   static std::chrono::milliseconds constexpr CTRL_LOOP_RATE{10};
   rclcpp::TimerBase::SharedPtr _ctrl_loop_timer;
