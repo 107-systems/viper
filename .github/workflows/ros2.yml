@@ -63,7 +63,7 @@ jobs:
         cd ${{github.workspace}}/ros2_ws
         colcon build
         
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
       with:
         path: 'ros2_ws/src/viper'
         submodules: true
