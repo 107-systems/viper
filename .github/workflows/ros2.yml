@@ -56,18 +56,24 @@ jobs:
       with:
         required-ros-distributions: ${{ matrix.ros_distro }}
     
-    - name: Setup ros2 workspace
+    - name: Setup ros2 workspace directory
       run: | 
-        source /opt/ros/${{ matrix.ros_distro }}/setup.bash
         mkdir -p ${{github.workspace}}/ros2_ws/src
-        cd ${{github.workspace}}/ros2_ws
-        colcon build
         
-    - uses: actions/checkout@v7
+    - uses: actions/checkout@v4
       with:
         path: 'ros2_ws/src/viper'
         submodules: true
         fetch-depth: 1
+
+    # Install ROS dependencies using rosdep
+    - name: Install ROS dependencies
+      run: |
+        source /opt/ros/${{ matrix.ros_distro }}/setup.bash
+        sudo rosdep init || true  # '|| true' ignores error if already initialized
+        rosdep update
+        cd ${{github.workspace}}/ros2_ws
+        rosdep install --from-paths src --ignore-src -r -y --rosdistro ${{ matrix.ros_distro }}
 
     - name: colcon build
       run: |

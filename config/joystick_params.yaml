@@ -1,0 +1,37 @@
+# This YAML file provides a custom mapping for knock-off PS3 Controller
+/**:
+# teleop_twist_joy_node:
+  ros__parameters:
+    # 1. Axis Mapping (Sticks)
+    # Standard Mode 2: Left stick is Thrust/Yaw, Right stick is Pitch/Roll
+    axis_linear:
+      x: 3                # Pitch (Forward/Backward)
+      y: 2                # Roll (Left/Right)
+      z: 1                # Thrust (Up/Down) - usually a trigger or stick
+    
+    axis_angular:
+      yaw: 0              # Yaw (Rotate Left/Right)
+
+    # 2. Scaling (Sensitivity)
+    # These values multiply the joystick input (-1 to 1) 
+    # to reach your desired velocity in m/s or rad/s.
+    scale_linear:
+      x: 1.0              # Max pitch speed
+      y: 1.0              # Max roll speed
+      z: 1.0              # Max climb rate
+    
+    scale_angular:
+      yaw: 1.0            # Max rotation speed
+
+    # 3. Safety & Enable Buttons
+    # The node will NOT publish commands unless this button is held.
+    enable_button: 7      # e.g., Right Bumper (R1)
+    require_enable_button: true
+
+    # 4. Turbo Mode (Optional)
+    # Hold a second button to go faster
+    #enable_turbo_button: 4 # e.g., Left Bumper (L1)
+    #scale_linear_turbo:
+    #  x: 5.0
+    #  y: 5.0
+    #  z: 3.0

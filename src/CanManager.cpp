@@ -29,13 +29,17 @@ CanManager::CanManager(rclcpp::Logger const logger, std::string const & iface_na
 , IS_CAN_FD{false}
 , _socket_can_fd{socketcanOpen(IFACE_NAME.c_str(), IS_CAN_FD)}
 , _on_can_frame_received{on_can_frame_received}
-, _rx_thread_active{false}
-, _rx_thread{[this]() { this->rx_thread_func(); }}
+, _rx_thread_active{false} // Do NOT initialize the thread in the initializer list anymore
 {
   if (_socket_can_fd < 0) {
     RCLCPP_ERROR(_logger, "Error opening CAN interface '%s'.", iface_name.c_str());
     rclcpp::shutdown();
+    return;
   }
+
+  // Safely spin up the thread now that the socket is guaranteed open
+  _rx_thread_active = true;
+  _rx_thread = std::thread([this]() { this->rx_thread_func(); });
 }
 
 CanManager::~CanManager()

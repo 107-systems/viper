@@ -15,25 +15,27 @@
 #include <rclcpp/rclcpp.hpp>
 
 #include <std_msgs/msg/float32.hpp>
+#include <std_msgs/msg/float32_multi_array.hpp>
+#include <actuator_msgs/msg/actuators.hpp>
 
 #include <sensor_msgs/msg/imu.hpp>
+#include <sensor_msgs/msg/joy.hpp>
 #include <geometry_msgs/msg/twist.hpp>
+#include <rcl_interfaces/msg/parameter_event.hpp>
 
 #include <cyphal++/cyphal++.h>
 
-#include <mp-units/systems/si/si.h>
-#include <mp-units/systems/angular/angular.h>
-
 #include "CanManager.h"
+#include "vector.h"
+#include "ComplementaryFilter.h"
+#include "ExternalEstimator.h"
+#include "CascadedController.h"
+#include "MotorMixer.h"
+
 
 /**************************************************************************************
  * NAMESPACE
  **************************************************************************************/
-
-using namespace mp_units;
-using mp_units::si::unit_symbols::m;
-using mp_units::si::unit_symbols::s;
-using mp_units::angular::unit_symbols::rad;
 
 namespace viper
 {
@@ -57,7 +59,7 @@ private:
   std::mutex _node_mtx;
   std::chrono::steady_clock::time_point const _node_start;
   std::unique_ptr<CanManager> _can_mgr;
-  static std::chrono::milliseconds constexpr NODE_LOOP_RATE{1};
+  static std::chrono::microseconds constexpr NODE_LOOP_RATE{100};
   rclcpp::TimerBase::SharedPtr _node_loop_timer;
 
   cyphal::Publisher<uavcan::node::Heartbeat_1_0> _cyphal_heartbeat_pub;
@@ -73,41 +75,59 @@ private:
   rclcpp::QoS _teleop_qos_profile;
   rclcpp::SubscriptionOptions _teleop_sub_options;
   rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr _teleop_sub;
-  quantity<m/s> _target_linear_velocity_x, _target_linear_velocity_y, _target_linear_velocity_z;
-  quantity<rad/s> _target_angular_velocity_x, _target_angular_velocity_y, _target_angular_velocity_z;
+
+  // Vectors representing target given from PS3 controller (dimensionless)
+  Vector _target_linear_velocity;
+  Vector _target_angular_velocity;
+
   void init_teleop_sub();
+
+  rclcpp::Subscription<sensor_msgs::msg::Joy>::SharedPtr _joy_sub;
+  bool _armed;
+  int _joy_enable_button_index;
+  void init_joy_sub();
 
   rclcpp::QoS _imu_qos_profile;
   rclcpp::SubscriptionOptions _imu_sub_options;
   rclcpp::Subscription<sensor_msgs::msg::Imu>::SharedPtr _imu_sub;
-  sensor_msgs::msg::Imu _imu_data;
+  rclcpp::Subscription<rcl_interfaces::msg::ParameterEvent>::SharedPtr _parameter_event_sub;
+//   sensor_msgs::msg::Imu _imu_data; // Removed. Replaced with new Estimator class
   void init_imu_sub();
+  void on_parameter_event(rcl_interfaces::msg::ParameterEvent::SharedPtr event);
 
+  // Arbitrary Topic ID chosen for velocity control
+  static uint16_t constexpr SETPOINT_VELOCITY_ID = 113;
+  cyphal::Publisher<zubax::primitive::real16::Vector4_1_0> _setpoint_velocity_pub;
 
-  static uint16_t constexpr CYPHAL_DEMO_PORT_ID = 1234;
-  cyphal::Publisher<uavcan::primitive::scalar::Integer8_1_0> _cyphal_demo_pub;
+  // Publisher for Gazebo motor commands (bridged to Ignition)
+  rclcpp::Publisher<actuator_msgs::msg::Actuators>::SharedPtr _gazebo_motor_pub;
 
-  static uint16_t constexpr SETPOINT_VELOCITY_ID_1 = 113;
-  cyphal::Publisher<zubax::primitive::real16::Vector4_1_0> _setpoint_velocity_pub_1;
+  // Attitude control system (default constructor called)
+  AttitudeController _attitude_controller;
+  RateController _rate_controller;
+  MotorMixer _motor_mixer;
+  
+  // Control targets
+  Quaternion _attitude_target;  // Target attitude (identity = level)
+  float _yaw_target;            // Integrated heading reference for yaw
+  float _thrust_target = 0.0f;  // Target collective thrust [0, 1]
+  Vector _rates_extra;          // Feedforward rates (used for yaw feedforward)
+  bool _acro_mode = false;      // When true, bypass attitude control and use direct rate commands
+  
+  // Declare parameters for tuning
+  void declare_control_parameters();
+  void load_parameters();
 
-  static uint16_t constexpr SETPOINT_VELOCITY_ID_2 = 114;
-  cyphal::Publisher<zubax::primitive::real16::Vector4_1_0> _setpoint_velocity_pub_2;
+  // Helper: Update attitude target based on teleop inputs and integrated yaw
+  void update_attitude_target(const Quaternion& attitude_current);
 
-
-  static uint16_t constexpr SETPOINT_VELOCITY_ID_3 = 115;
-  cyphal::Publisher<zubax::primitive::real16::Vector4_1_0> _setpoint_velocity_pub_3;
-
-  static uint16_t constexpr SETPOINT_VELOCITY_ID_4 = 116;
-  cyphal::Publisher<zubax::primitive::real16::Vector4_1_0> _setpoint_velocity_pub_4;
-    
-
-    
-    
-
-
-
+  // ctrl_loop variables
   static std::chrono::milliseconds constexpr CTRL_LOOP_RATE{10};
   rclcpp::TimerBase::SharedPtr _ctrl_loop_timer;
+
+  // Estimator object to perform state estimation
+  std::unique_ptr<EstimatorBase> _estimator;
+
   void ctrl_loop();
 };
 

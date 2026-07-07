@@ -1,4 +1,11 @@
 #!/bin/bash
+
+# This script must be sourced, not executed.
+(return 0 2>/dev/null) || {
+    echo "Error: This script must be sourced, not run."
+    exit 1
+}
+
 if [[ ! -v CYPHAL_PATH ]]; then
     echo "CYPHAL_PATH is not set." >> /dev/stderr
     exit 1

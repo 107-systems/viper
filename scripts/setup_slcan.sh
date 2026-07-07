@@ -1,5 +1,6 @@
 #!/bin/bash
 # Pavel Kirienko <pavel@uavcan.org>
+# No need to edit this file directly. Change arguments when calling it
 
 HELP="Register slcan-enabled serial-to-CAN adapters as network interfaces.
 Usage:

@@ -1,0 +1,14 @@
+# ROS-Gazebo Bridge Configuration
+# Bridges ROS 2 topics to Ignition Gazebo
+# Motor commands bridge
+- ros_topic_name: "/viper/motor_speed"
+  gz_topic_name: "/X3/gazebo/command/motor_speed"
+  ros_type_name: "actuator_msgs/msg/Actuators"
+  gz_type_name: "ignition.msgs.Actuators"
+  direction: ROS_TO_GZ
+
+- ros_topic_name: "/imu"
+  gz_topic_name: "/gazebo/imu"
+  ros_type_name: "sensor_msgs/msg/Imu"
+  gz_type_name: "ignition.msgs.IMU"
+  direction: GZ_TO_ROS
