@@ -60,7 +60,7 @@ jobs:
       run: | 
         mkdir -p ${{github.workspace}}/ros2_ws/src
         
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7
       with:
         path: 'ros2_ws/src/viper'
         submodules: true
